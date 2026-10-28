@@ -28,7 +28,10 @@ jobs:
     outputs:
       count: ${{ steps.inbox.outputs.count }}
     steps:
+      # Always the latest main, even when re-running an old run (a re-run otherwise reuses that run's old commit).
       - uses: actions/checkout@v5
+        with:
+          ref: main
       - id: inbox
         run: echo "count=$(node scripts/ingest.mjs --count)" >> "$GITHUB_OUTPUT"
 
@@ -45,7 +48,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
+      # Always the latest main, even when re-running an old run (a re-run otherwise reuses that run's old commit).
       - uses: actions/checkout@v5
+        with:
+          ref: main
       - uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -54,17 +60,22 @@ jobs:
 
       - name: Add submitted recordings
         if: needs.check.outputs.count != '0'
+        # If main moves on while this runs (e.g. you push), start again from the new main rather than merging:
+        # ingest skips anything already published, so retrying is safe and recordings.json never conflicts.
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-          node scripts/ingest.mjs
-          if [ -n "$(git status --porcelain public)" ]; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch -q origin main && git reset -q --hard origin/main
+            node scripts/ingest.mjs
+            [ -z "$(git status --porcelain public)" ] && exit 0
             git add public/recordings.json public/audio
-            git commit -m 'Add submitted recordings'
-            git pull --rebase
-            git push
-          fi
+            git commit -q -m 'Add submitted recordings'
+            git push origin HEAD:main && exit 0
+            echo "main changed while adding recordings; retrying from the latest version"
+          done
+          exit 1
 
       - run: npm run build
         env:
