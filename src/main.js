@@ -64,6 +64,7 @@ function select(rec) {
   refreshPoints();
   showPanel(rec);
   ensureAudio().play(rec.id);
+  updatePlayButton();
 }
 
 function deselect() {
@@ -81,14 +82,44 @@ function refreshPoints() {
 function showPanel(rec) {
   panel.innerHTML = `
     <button class="close" aria-label="Stop">×</button>
-    <h2>${escapeHtml(rec.title)}</h2>
+    <header>
+      <button class="play"></button>
+      <h2>${escapeHtml(rec.title)}</h2>
+    </header>
     ${rec.author ? `<p class="author">by ${escapeHtml(rec.author)}</p>` : ''}
     <p class="meta">${escapeHtml(rec.date ?? '')}</p>
     <p>${escapeHtml(rec.notes ?? '')}</p>
   `;
   panel.querySelector('.close').addEventListener('click', deselect);
+  panel.querySelector('.play').addEventListener('click', togglePlayback);
+  updatePlayButton();
   panel.classList.remove('hidden');
 }
+
+const PLAY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+const PAUSE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+
+function togglePlayback() {
+  if (!selectedId) return;
+  if (audio?.isPlaying(selectedId)) audio.pause(selectedId);
+  else ensureAudio().play(selectedId);
+  updatePlayButton();
+}
+
+function updatePlayButton() {
+  const button = panel.querySelector('.play');
+  if (!button) return;
+  const playing = audio?.isPlaying(selectedId);
+  button.innerHTML = playing ? PAUSE_ICON : PLAY_ICON;
+  button.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+}
+
+// Space bar toggles play/pause while a recording is open (but not while typing in the upload form).
+window.addEventListener('keydown', (e) => {
+  if (e.code !== 'Space' || !selectedId || e.target.closest('input, textarea, button')) return;
+  e.preventDefault();
+  togglePlayback();
+});
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);

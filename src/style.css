@@ -112,3 +112,20 @@ html, body {
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.5);
   pointer-events: none;
 }
+
+#panel header { display: flex; align-items: center; gap: 12px; margin: 0 0 6px; padding-right: 20px; }
+#panel header h2 { margin: 0; }
+#panel .play {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #000;
+  background: #7ad7ff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+#panel .play svg { width: 18px; height: 18px; fill: currentColor; }

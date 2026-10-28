@@ -4,6 +4,7 @@
 // mode only needs to set every gain at once (see setGains).
 
 const FADE_SECONDS = 1.5;
+const PAUSE_FADE_SECONDS = 0.3; // quick, so pause feels immediate but doesn't click
 
 export class AudioEngine {
   constructor() {
@@ -49,16 +50,25 @@ export class AudioEngine {
     this.current = id;
   }
 
-  stop(id) {
+  // play(id) after stop or pause carries on from the same spot.
+  stop(id, fadeSeconds = FADE_SECONDS) {
     const voice = this.voices.get(id);
     if (!voice) return;
-    this.#rampTo(voice.gain, 0);
+    this.#rampTo(voice.gain, 0, fadeSeconds);
     clearTimeout(voice.pauseTimer);
     voice.pauseTimer = setTimeout(() => {
       // Only pause if nothing has faded this voice back in meanwhile.
       if (this.current !== id) voice.el.pause();
-    }, FADE_SECONDS * 1000);
+    }, fadeSeconds * 1000);
     if (this.current === id) this.current = null;
+  }
+
+  pause(id) {
+    this.stop(id, PAUSE_FADE_SECONDS);
+  }
+
+  isPlaying(id) {
+    return this.current === id;
   }
 
   // For the future composite mode: { id: 0..1, ... }
