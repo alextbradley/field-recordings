@@ -35,5 +35,14 @@
     "file": "audio/water-drag.mp3",
     "notes": "Aquarian H2d Hydrophone",
     "master": "masters/20261028T160647-water-drag.wav"
+  },
+  {
+    "id": "polruan-jetty",
+    "title": "Polruan Jetty",
+    "lat": 50.329705,
+    "lng": -4.634931,
+    "date": "2026-08-28",
+    "file": "audio/polruan-jetty.mp3",
+    "master": "masters/20261028T161835-polruan-jetty.wav"
   }
 ]
