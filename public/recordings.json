@@ -87,5 +87,15 @@
     "date": "2026-07-09",
     "file": "audio/it-s-un-grillon.mp3",
     "master": "masters/20261028T171008-it-s-un-grillon.m4a"
+  },
+  {
+    "id": "schafbergbahn",
+    "title": "Schafbergbahn",
+    "author": "rowan",
+    "lat": 47.768107,
+    "lng": 13.423639,
+    "date": "2026-05-01",
+    "file": "audio/schafbergbahn.mp3",
+    "master": "masters/20261028T172603-schafbergbahn.m4a"
   }
 ]
