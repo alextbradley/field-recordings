@@ -159,5 +159,16 @@
     "date": "2026-10-28",
     "file": "audio/weaver-line.mp3",
     "master": "masters/20261028T195707-weaver-line.m4a"
+  },
+  {
+    "id": "st-james-s-church",
+    "title": "St James's Church",
+    "author": "rowan",
+    "lat": 51.513187,
+    "lng": -0.176535,
+    "date": "2026-10-28",
+    "file": "audio/st-james-s-church.mp3",
+    "notes": "sarah",
+    "master": "masters/20261028T232618-st-james-s-church.m4a"
   }
 ]
