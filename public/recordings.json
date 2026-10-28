@@ -149,5 +149,15 @@
     "file": "audio/scott-playing-a-good-song-at-kelburn.mp3",
     "notes": "it's called Silkron - Jurgen Paape",
     "master": "masters/20261028T180445-scott-playing-a-good-song-at-kelburn.m4a"
+  },
+  {
+    "id": "weaver-line",
+    "title": "Weaver line",
+    "author": "Alex",
+    "lat": 51.550556,
+    "lng": -0.062051,
+    "date": "2026-10-28",
+    "file": "audio/weaver-line.mp3",
+    "master": "masters/20261028T195707-weaver-line.m4a"
   }
 ]
