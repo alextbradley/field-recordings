@@ -6,7 +6,7 @@ html, body {
   overflow: hidden;
   background: #000;
   color: #eee;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Jost, system-ui, sans-serif;
 }
 
 #panel {
@@ -39,7 +39,7 @@ html, body {
 .hidden { opacity: 0; pointer-events: none; }
 
 .tooltip {
-  font-family: Georgia, serif;
+  font-family: inherit;
   padding: 4px 8px;
   background: rgba(0, 0, 0, 0.7);
   border-radius: 4px;
@@ -49,7 +49,7 @@ html, body {
   position: fixed;
   right: 8px;
   bottom: 4px;
-  font-family: system-ui, sans-serif;
+  font-family: inherit;
   font-size: 10px;
   opacity: 0.55;
   pointer-events: none;
