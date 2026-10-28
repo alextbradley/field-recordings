@@ -35,6 +35,7 @@ html, body {
   transition: opacity 0.4s;
 }
 #panel h2 { margin: 0 0 4px; font-weight: normal; font-size: 1.2rem; }
+#panel .author { margin: 0 0 4px; font-style: italic; opacity: 0.9; }
 #panel .meta { margin: 0 0 8px; opacity: 0.6; font-size: 0.85rem; }
 #panel p { margin: 0; line-height: 1.4; }
 #panel .close {

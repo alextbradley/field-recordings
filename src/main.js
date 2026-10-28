@@ -81,7 +81,8 @@ function showPanel(rec) {
   panel.innerHTML = `
     <button class="close" aria-label="Stop">×</button>
     <h2>${escapeHtml(rec.title)}</h2>
-    <p class="meta">${escapeHtml([rec.date, rec.author && `by ${rec.author}`].filter(Boolean).join(' · '))}</p>
+    ${rec.author ? `<p class="author">by ${escapeHtml(rec.author)}</p>` : ''}
+    <p class="meta">${escapeHtml(rec.date ?? '')}</p>
     <p>${escapeHtml(rec.notes ?? '')}</p>
   `;
   panel.querySelector('.close').addEventListener('click', deselect);
