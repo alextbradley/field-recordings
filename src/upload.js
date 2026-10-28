@@ -3,6 +3,7 @@
 
 const PART_SIZE = 25 * 1024 * 1024; // R2 needs equal parts of at least 5 MB; one Worker request allows up to 100 MB
 const PASSCODE_KEY = 'upload-passcode';
+const AUTHOR_KEY = 'upload-author';
 
 export function setupUploads({ globe, uploadUrl }) {
   const button = document.createElement('button');
@@ -17,6 +18,7 @@ export function setupUploads({ globe, uploadUrl }) {
     <h2>Add a recording</h2>
     <label>Audio file <input name="file" type="file" accept=".wav,.aif,.aiff,.flac,.mp3,.m4a" required></label>
     <label>Title <input name="title" required maxlength="200"></label>
+    <label>Author <input name="author" maxlength="200" autocomplete="name"></label>
     <div class="row">
       <label>Latitude <input name="lat" type="number" step="any" min="-90" max="90" required placeholder="51.4769"></label>
       <label>Longitude <input name="lng" type="number" step="any" min="-180" max="180" required placeholder="-0.0005"></label>
@@ -41,6 +43,7 @@ export function setupUploads({ globe, uploadUrl }) {
 
   try {
     field('passcode').value = localStorage.getItem(PASSCODE_KEY) ?? '';
+    field('author').value = localStorage.getItem(AUTHOR_KEY) ?? '';
   } catch {}
 
   const open = () => {
@@ -111,7 +114,7 @@ export function setupUploads({ globe, uploadUrl }) {
     const file = field('file').files[0];
     const passcode = field('passcode').value;
     const details = { filename: file.name };
-    for (const name of ['title', 'lat', 'lng', 'date', 'notes']) details[name] = field(name).value;
+    for (const name of ['title', 'author', 'lat', 'lng', 'date', 'notes']) details[name] = field(name).value;
 
     const call = async (route, init) => {
       const res = await fetch(new URL(route, uploadUrl), {
@@ -131,7 +134,8 @@ export function setupUploads({ globe, uploadUrl }) {
     try {
       const { key, uploadId } = await sendJson('uploads', details);
       try {
-        localStorage.setItem(PASSCODE_KEY, passcode); // accepted, so remember it on this device
+        localStorage.setItem(PASSCODE_KEY, passcode); // accepted, so remember it (and the author) on this device
+        localStorage.setItem(AUTHOR_KEY, details.author);
       } catch {}
 
       const parts = [];
@@ -144,9 +148,9 @@ export function setupUploads({ globe, uploadUrl }) {
       }
       await sendJson('uploads/complete', { ...details, key, uploadId, parts });
 
-      const passcodeValue = field('passcode').value;
       form.reset();
-      field('passcode').value = passcodeValue;
+      field('passcode').value = passcode;
+      field('author').value = details.author;
       globe.htmlElementsData([]);
       status.textContent = `Sent “${details.title}”. It will appear on the globe after the next rebuild (usually within the hour).`;
     } catch (err) {

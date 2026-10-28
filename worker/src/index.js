@@ -78,17 +78,19 @@ export default {
 
 class InvalidInput extends Error {}
 
-function validate({ filename, title, lat, lng, date, notes }) {
+function validate({ filename, title, author, lat, lng, date, notes }) {
   const ext = /\.[^.]+$/.exec(String(filename ?? ''))?.[0].toLowerCase();
   title = String(title ?? '').trim();
+  author = String(author ?? '').trim();
   lat = Number(lat);
   lng = Number(lng);
   if (!AUDIO_EXTENSIONS.includes(ext)) throw new InvalidInput(`Unsupported file type. Use one of: ${AUDIO_EXTENSIONS.join(', ')}`);
   if (!title || title.length > 200) throw new InvalidInput('Give the recording a title (up to 200 characters).');
+  if (author.length > 200) throw new InvalidInput('Author is limited to 200 characters.');
   if (!(Math.abs(lat) <= 90) || !(Math.abs(lng) <= 180)) throw new InvalidInput('Latitude must be -90 to 90 and longitude -180 to 180.');
   if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new InvalidInput('Date must look like 2026-05-01.');
   if (notes && String(notes).length > 5000) throw new InvalidInput('Notes are limited to 5000 characters.');
-  return { meta: { title, lat, lng, date: date || undefined, notes: notes ? String(notes).trim() : undefined }, ext };
+  return { meta: { title, author: author || undefined, lat, lng, date: date || undefined, notes: notes ? String(notes).trim() : undefined }, ext };
 }
 
 // Hash both sides first so the comparison takes the same time whatever the passcode length.

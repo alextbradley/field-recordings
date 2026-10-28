@@ -54,8 +54,8 @@ if (mode === '--count') {
     await pipeline(Readable.fromWeb(res.body), createWriteStream(path.join(root, original)));
     execFileSync(path.join(root, 'scripts/encode.sh'), [original], { cwd: root, stdio: 'inherit' });
 
-    const { title, lat, lng, date, notes, master } = item;
-    recordings.push({ id, title, lat, lng, date, file: `audio/${id}.mp3`, notes, master });
+    const { title, author, lat, lng, date, notes, master } = item;
+    recordings.push({ id, title, author, lat, lng, date, file: `audio/${id}.mp3`, notes, master });
     console.log(`added ${id} from ${master}`);
   }
   await writeFile(listPath, JSON.stringify(recordings, null, 2) + '\n');
