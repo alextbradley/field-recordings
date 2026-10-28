@@ -4,7 +4,6 @@ import { setupUploads } from './upload.js';
 import './style.css';
 
 const globeEl = document.getElementById('globe');
-const intro = document.getElementById('intro');
 const panel = document.getElementById('panel');
 
 const recordings = await fetch('recordings.json').then((r) => r.json());
@@ -43,14 +42,16 @@ window.addEventListener('resize', () => {
   globe.width(window.innerWidth).height(window.innerHeight);
 });
 
-// Browsers only allow audio after a user gesture, so the intro screen doubles as the unlock.
-intro.addEventListener('click', async () => {
-  audio = new AudioEngine();
-  recordings.forEach((r) => audio.add(r));
-  audio.onEnded = () => deselect();
-  await audio.unlock();
-  intro.classList.add('hidden');
-});
+// Browsers only allow audio after a user gesture, so the engine is created on the first pin click.
+function ensureAudio() {
+  if (!audio) {
+    audio = new AudioEngine();
+    recordings.forEach((r) => audio.add(r));
+    audio.onEnded = () => deselect();
+  }
+  audio.unlock();
+  return audio;
+}
 
 // The form needs the upload inbox's address (VITE_UPLOAD_URL, set by the publish workflow or .env.local).
 if (import.meta.env.VITE_UPLOAD_URL) setupUploads({ globe, uploadUrl: import.meta.env.VITE_UPLOAD_URL });
@@ -62,7 +63,7 @@ function select(rec) {
   globe.ringsData([rec]);
   refreshPoints();
   showPanel(rec);
-  audio?.play(rec.id);
+  ensureAudio().play(rec.id);
 }
 
 function deselect() {

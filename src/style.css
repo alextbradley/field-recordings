@@ -9,20 +9,6 @@ html, body {
   font-family: Georgia, 'Times New Roman', serif;
 }
 
-#intro {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: grid;
-  place-content: center;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.75);
-  cursor: pointer;
-  transition: opacity 1s;
-}
-#intro h1 { font-weight: normal; letter-spacing: 0.05em; margin: 0 0 0.5em; }
-#intro p { opacity: 0.7; margin: 0; }
-
 #panel {
   position: fixed;
   left: 16px;
