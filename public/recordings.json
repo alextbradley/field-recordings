@@ -25,5 +25,15 @@
     "date": "2024-11-20",
     "file": "audio/placeholder-drone.mp3",
     "notes": "Replace with a real recording."
+  },
+  {
+    "id": "water-drag",
+    "title": "Water Drag",
+    "lat": 56.153372,
+    "lng": -5.576183,
+    "date": "2026-08-18",
+    "file": "audio/water-drag.mp3",
+    "notes": "Aquarian H2d Hydrophone",
+    "master": "masters/20261028T160647-water-drag.wav"
   }
 ]
