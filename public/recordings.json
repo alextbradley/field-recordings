@@ -29,6 +29,7 @@
   {
     "id": "water-drag",
     "title": "Water Drag",
+    "author": "Rowan McIlvride",
     "lat": 56.153372,
     "lng": -5.576183,
     "date": "2026-08-18",
@@ -39,6 +40,7 @@
   {
     "id": "polruan-jetty",
     "title": "Polruan Jetty",
+    "author": "Rowan McIlvride",
     "lat": 50.329705,
     "lng": -4.634931,
     "date": "2026-08-28",
