@@ -8,7 +8,9 @@ bucket_name = "field-recordings"
 
 [vars]
 # Sites allowed to upload from a browser, comma-separated. Add your GitHub Pages address, e.g. https://yourname.github.io
-ALLOWED_ORIGINS = "http://localhost:5173,http://localhost:4173"
+ALLOWED_ORIGINS = "http://localhost:5173,http://localhost:4173,https://alextbradley.github.io"
 
 # The passcode is a secret, not a var: set it with `npx wrangler secret put UPLOAD_PASSCODE`
 # (and for local testing, put UPLOAD_PASSCODE=... in worker/.dev.vars).
+
+
