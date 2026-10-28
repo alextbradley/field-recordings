@@ -46,5 +46,16 @@
     "date": "2026-08-28",
     "file": "audio/polruan-jetty.mp3",
     "master": "masters/20261028T161835-polruan-jetty.wav"
+  },
+  {
+    "id": "fontainebleau-market",
+    "title": "Fontainebleau market",
+    "author": "Alex Bradley",
+    "lat": 48.405855,
+    "lng": 2.700804,
+    "date": "2026-04-05",
+    "file": "audio/fontainebleau-market.mp3",
+    "notes": "Buying cheese",
+    "master": "masters/20261028T165519-fontainebleau-market.m4a"
   }
 ]
