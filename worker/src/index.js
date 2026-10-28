@@ -8,6 +8,7 @@
 // Every route needs "Authorization: Bearer <UPLOAD_PASSCODE>".
 
 const AUDIO_EXTENSIONS = ['.wav', '.aif', '.aiff', '.flac', '.mp3', '.m4a'];
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // keep in step with src/upload.js
 
 export default {
   async fetch(request, env) {
@@ -33,8 +34,12 @@ export default {
 
       if (route === 'PUT /uploads/part') {
         if (!key.startsWith('masters/')) return json(400, { error: 'Bad key.' });
+        // The limit is below the form's part size, so a valid upload is always one part of at most MAX_UPLOAD_BYTES.
+        const size = Number(request.headers.get('Content-Length'));
+        const partNumber = Number(url.searchParams.get('partNumber'));
+        if (partNumber !== 1 || !(size <= MAX_UPLOAD_BYTES)) return json(413, { error: tooBig() });
         const upload = env.BUCKET.resumeMultipartUpload(key, url.searchParams.get('uploadId'));
-        const part = await upload.uploadPart(Number(url.searchParams.get('partNumber')), request.body);
+        const part = await upload.uploadPart(partNumber, request.body);
         return json(200, part);
       }
 
@@ -77,6 +82,8 @@ export default {
 };
 
 class InvalidInput extends Error {}
+
+const tooBig = () => `Files can be at most ${MAX_UPLOAD_BYTES / 1024 / 1024} MB.`;
 
 function validate({ filename, title, author, lat, lng, date, notes }) {
   const ext = /\.[^.]+$/.exec(String(filename ?? ''))?.[0].toLowerCase();

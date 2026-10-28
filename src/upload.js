@@ -1,6 +1,7 @@
 // "Add recording" form. Submissions go to the Cloudflare inbox (worker/), not straight onto the site:
 // the publish workflow collects them, encodes them and rebuilds, so a new pin appears after the next run.
 
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // the Worker enforces the same limit (worker/src/index.js)
 const PART_SIZE = 25 * 1024 * 1024; // R2 needs equal parts of at least 5 MB; one Worker request allows up to 100 MB
 const PASSCODE_KEY = 'upload-passcode';
 const AUTHOR_KEY = 'upload-author';
@@ -16,7 +17,7 @@ export function setupUploads({ globe, uploadUrl }) {
   form.className = 'hidden';
   form.innerHTML = `
     <h2>Add a recording</h2>
-    <label>Audio file <input name="file" type="file" accept=".wav,.aif,.aiff,.flac,.mp3,.m4a" required></label>
+    <label>Audio file (max 10 MB) <input name="file" type="file" accept=".wav,.aif,.aiff,.flac,.mp3,.m4a" required></label>
     <label>Title <input name="title" required maxlength="200"></label>
     <label>Author <input name="author" maxlength="200" autocomplete="name"></label>
     <div class="row">
@@ -102,6 +103,7 @@ export function setupUploads({ globe, uploadUrl }) {
   field('file').addEventListener('change', () => {
     const file = field('file').files[0];
     if (!file) return;
+    status.textContent = file.size > MAX_UPLOAD_BYTES ? tooBig(file) : '';
     if (!field('title').value) field('title').value = file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
     if (!field('date').value) {
       const d = new Date(file.lastModified);
@@ -112,6 +114,7 @@ export function setupUploads({ globe, uploadUrl }) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const file = field('file').files[0];
+    if (file.size > MAX_UPLOAD_BYTES) return (status.textContent = tooBig(file));
     const passcode = field('passcode').value;
     const details = { filename: file.name };
     for (const name of ['title', 'author', 'lat', 'lng', 'date', 'notes']) details[name] = field(name).value;
@@ -159,4 +162,9 @@ export function setupUploads({ globe, uploadUrl }) {
       submit.disabled = false;
     }
   });
+}
+
+function tooBig(file) {
+  const mb = (bytes) => (bytes / 1024 / 1024).toFixed(1).replace(/\.0$/, '');
+  return `That file is ${mb(file.size)} MB; the limit is ${mb(MAX_UPLOAD_BYTES)} MB. Try exporting it as MP3 or M4A.`;
 }
