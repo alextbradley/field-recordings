@@ -1,0 +1,83 @@
+# Builds the site and publishes it to GitHub Pages.
+# Every 30 minutes it also checks the Cloudflare inbox (worker/) for recordings submitted through the site's form;
+# if there are any, it encodes them, commits them to the repo and republishes. Empty checks stop after a few seconds.
+#
+# Repo setup (Settings): Pages > Source: "GitHub Actions"
+#                        Secrets and variables > Actions: secret UPLOAD_PASSCODE, variable UPLOAD_URL (the worker's address)
+
+name: Publish site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+env:
+  UPLOAD_URL: ${{ vars.UPLOAD_URL }}
+  UPLOAD_PASSCODE: ${{ secrets.UPLOAD_PASSCODE }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      count: ${{ steps.inbox.outputs.count }}
+    steps:
+      - uses: actions/checkout@v5
+      - id: inbox
+        run: echo "count=$(node scripts/ingest.mjs --count)" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: check
+    # Scheduled runs only carry on when something is waiting; pushes and manual runs always publish.
+    if: github.event_name != 'schedule' || needs.check.outputs.count != '0'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Add submitted recordings
+        if: needs.check.outputs.count != '0'
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          node scripts/ingest.mjs
+          if [ -n "$(git status --porcelain public)" ]; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add public/recordings.json public/audio
+            git commit -m 'Add submitted recordings'
+            git pull --rebase
+            git push
+          fi
+
+      - run: npm run build
+        env:
+          VITE_UPLOAD_URL: ${{ vars.UPLOAD_URL }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+      # Only clears submissions that are now in the committed recordings.json. If an earlier step failed,
+      # they stay in the inbox and the next scheduled run retries (ingest skips ones already added).
+      - name: Clear published recordings from the inbox
+        if: needs.check.outputs.count != '0'
+        run: node scripts/ingest.mjs --ack

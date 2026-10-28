@@ -1,0 +1,14 @@
+name = "field-recordings-inbox"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "field-recordings"
+
+[vars]
+# Sites allowed to upload from a browser, comma-separated. Add your GitHub Pages address, e.g. https://yourname.github.io
+ALLOWED_ORIGINS = "http://localhost:5173,http://localhost:4173"
+
+# The passcode is a secret, not a var: set it with `npx wrangler secret put UPLOAD_PASSCODE`
+# (and for local testing, put UPLOAD_PASSCODE=... in worker/.dev.vars).

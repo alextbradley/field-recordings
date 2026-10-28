@@ -1,0 +1,29 @@
+[
+  {
+    "id": "placeholder-ocean",
+    "title": "Placeholder: Ocean",
+    "lat": 38.7139,
+    "lng": -9.1335,
+    "date": "2025-06-14",
+    "file": "audio/placeholder-ocean.mp3",
+    "notes": "Replace with a real recording."
+  },
+  {
+    "id": "placeholder-rain",
+    "title": "Placeholder: Rain",
+    "lat": 35.0116,
+    "lng": 135.7681,
+    "date": "2025-03-02",
+    "file": "audio/placeholder-rain.mp3",
+    "notes": "Replace with a real recording."
+  },
+  {
+    "id": "placeholder-drone",
+    "title": "Placeholder: Drone",
+    "lat": 64.1466,
+    "lng": -21.9426,
+    "date": "2024-11-20",
+    "file": "audio/placeholder-drone.mp3",
+    "notes": "Replace with a real recording."
+  }
+]
