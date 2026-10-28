@@ -97,5 +97,57 @@
     "date": "2026-05-01",
     "file": "audio/schafbergbahn.mp3",
     "master": "masters/20261028T172603-schafbergbahn.m4a"
+  },
+  {
+    "id": "wine-crickets",
+    "title": "Wine Crickets",
+    "author": "rowan",
+    "lat": 48.268452,
+    "lng": 16.323932,
+    "date": "2026-05-02",
+    "file": "audio/wine-crickets.mp3",
+    "master": "masters/20261028T173026-wine-crickets.m4a"
+  },
+  {
+    "id": "rowdy-boys",
+    "title": "Rowdy Boys",
+    "author": "rowan",
+    "lat": 51.531039,
+    "lng": -0.123118,
+    "date": "2026-10-28",
+    "file": "audio/rowdy-boys.mp3",
+    "master": "masters/20261028T173825-rowdy-boys.m4a"
+  },
+  {
+    "id": "tirana",
+    "title": "Tirana",
+    "author": "rowan",
+    "lat": 41.330988,
+    "lng": 19.824957,
+    "date": "2026-10-28",
+    "file": "audio/tirana.mp3",
+    "notes": "sweet songs from the boys",
+    "master": "masters/20261028T174006-tirana.m4a"
+  },
+  {
+    "id": "kirkcaldy-bams-playing-incredible-tunes",
+    "title": "Kirkcaldy Bams Playing Incredible Tunes",
+    "author": "rowan",
+    "lat": 56.112085,
+    "lng": -3.1664,
+    "date": "2026-10-28",
+    "file": "audio/kirkcaldy-bams-playing-incredible-tunes.mp3",
+    "master": "masters/20261028T180238-kirkcaldy-bams-playing-incredible-tunes.m4a"
+  },
+  {
+    "id": "scott-playing-a-good-song-at-kelburn",
+    "title": "Scott Playing A Good Song at Kelburn",
+    "author": "rowan",
+    "lat": 55.769092,
+    "lng": -4.845181,
+    "date": "2023-07-01",
+    "file": "audio/scott-playing-a-good-song-at-kelburn.mp3",
+    "notes": "it's called Silkron - Jurgen Paape",
+    "master": "masters/20261028T180445-scott-playing-a-good-song-at-kelburn.m4a"
   }
 ]
