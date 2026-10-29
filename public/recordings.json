@@ -180,5 +180,25 @@
     "date": "2026-10-29",
     "file": "audio/strand-whistles.mp3",
     "master": "masters/20261029T150233-strand-whistles.webm"
+  },
+  {
+    "id": "the-game",
+    "title": "The Game",
+    "lat": 51.556672,
+    "lng": -0.046129,
+    "date": "2026-10-29",
+    "file": "audio/the-game.mp3",
+    "master": "masters/20261029T185956-the-game.webm"
+  },
+  {
+    "id": "fish-game",
+    "title": "Fish game",
+    "author": "Alex",
+    "lat": 51.556731,
+    "lng": -0.046202,
+    "date": "2026-10-29",
+    "file": "audio/fish-game.mp3",
+    "notes": "Rowan’s weird fish game",
+    "master": "masters/20261029T191157-fish-game.webm"
   }
 ]
