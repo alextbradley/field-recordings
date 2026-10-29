@@ -7,8 +7,9 @@
 //
 // Every route needs "Authorization: Bearer <UPLOAD_PASSCODE>".
 
-const AUDIO_EXTENSIONS = ['.wav', '.aif', '.aiff', '.flac', '.mp3', '.m4a'];
-const MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // keep in step with src/upload.js
+// .webm and .ogg come from the site's in-browser recorder (Safari records .m4a).
+const AUDIO_EXTENSIONS = ['.wav', '.aif', '.aiff', '.flac', '.mp3', '.m4a', '.webm', '.ogg'];
+const MAX_UPLOAD_BYTES = 2 * 1024 * 1024; // keep in step with src/upload.js
 
 export default {
   async fetch(request, env) {

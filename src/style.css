@@ -129,3 +129,36 @@ html, body {
   cursor: pointer;
 }
 #panel .play svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* The form's own display rules would otherwise override the hidden attribute. */
+#upload [hidden] { display: none !important; }
+
+#upload .mode { display: flex; gap: 4px; margin: 0 0 14px; padding: 3px; background: rgba(255, 255, 255, 0.06); border-radius: 8px; }
+#upload .mode button { flex: 1; border: none; background: none; opacity: 0.7; }
+#upload .mode button[aria-selected='true'] { background: rgba(255, 255, 255, 0.14); opacity: 1; }
+
+.recorder { margin-bottom: 12px; }
+.recorder .controls { display: flex; align-items: center; gap: 14px; }
+#upload .recorder .rec {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  background: none;
+}
+.recorder .rec span { width: 24px; height: 24px; border-radius: 50%; background: #ff5a5a; transition: border-radius 0.2s; }
+.recorder .rec.recording span { border-radius: 4px; animation: rec-pulse 1.2s ease-in-out infinite; }
+@keyframes rec-pulse { 50% { opacity: 0.5; } }
+.recorder .readout { flex: 1; min-width: 0; }
+.recorder .time { font-size: 1.4rem; font-variant-numeric: tabular-nums; }
+.recorder .meter { height: 6px; margin: 4px 0; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
+.recorder .meter span { display: block; width: 0; height: 100%; background: #7ad7ff; transition: width 0.05s linear; }
+.recorder .size { font-size: 0.8rem; opacity: 0.65; min-height: 1em; }
+.recorder audio { display: block; width: 100%; margin-top: 10px; }
+.recorder .after { margin-top: 8px; }
+.recorder .note { margin: 8px 0 0; font-size: 0.85rem; color: #ffd27a; min-height: 0; }
+.recorder .note:empty { display: none; }

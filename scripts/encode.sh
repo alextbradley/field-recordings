@@ -8,7 +8,7 @@ cd "$(dirname "$0")/.."
 mkdir -p public/audio
 shopt -s nullglob nocaseglob
 files=("$@")
-[ ${#files[@]} -eq 0 ] && files=(originals/*.{wav,aif,aiff,flac,mp3,m4a})
+[ ${#files[@]} -eq 0 ] && files=(originals/*.{wav,aif,aiff,flac,mp3,m4a,webm,ogg})
 for f in ${files[@]+"${files[@]}"}; do  # this form is safe on macOS bash 3.2 when the list is empty
   name="$(basename "${f%.*}" | tr '[:upper:] ' '[:lower:]-')"
   echo "→ public/audio/$name.mp3"

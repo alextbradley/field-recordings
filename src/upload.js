@@ -1,7 +1,9 @@
 // "Add recording" form. Submissions go to the Cloudflare inbox (worker/), not straight onto the site:
 // the publish workflow collects them, encodes them and rebuilds, so a new pin appears after the next run.
 
-const MAX_UPLOAD_BYTES = 10 * 1024 * 1024; // the Worker enforces the same limit (worker/src/index.js)
+import { createRecorder, recordingSupported } from './recorder.js';
+
+const MAX_UPLOAD_BYTES = 2 * 1024 * 1024; // the Worker enforces the same limit (worker/src/index.js)
 const PART_SIZE = 25 * 1024 * 1024; // R2 needs equal parts of at least 5 MB; one Worker request allows up to 100 MB
 const PASSCODE_KEY = 'upload-passcode';
 const AUTHOR_KEY = 'upload-author';
@@ -17,7 +19,15 @@ export function setupUploads({ globe, uploadUrl }) {
   form.className = 'hidden';
   form.innerHTML = `
     <h2>Add a recording</h2>
-    <label>Audio file (max 10 MB) <input name="file" type="file" accept=".wav,.aif,.aiff,.flac,.mp3,.m4a" required></label>
+    <div class="mode" role="tablist" hidden>
+      <button type="button" role="tab" data-mode="upload" aria-selected="true">Upload a file</button>
+      <button type="button" role="tab" data-mode="record" aria-selected="false">Record</button>
+    </div>
+    <div data-pane="upload">
+      <label>Audio file (max ${MAX_UPLOAD_BYTES / 1024 / 1024} MB)
+        <input name="file" type="file" accept=".wav,.aif,.aiff,.flac,.mp3,.m4a" required></label>
+    </div>
+    <div data-pane="record" hidden></div>
     <label>Title <input name="title" required maxlength="200"></label>
     <label>Author <input name="author" maxlength="200" autocomplete="name"></label>
     <div class="row">
@@ -42,6 +52,32 @@ export function setupUploads({ globe, uploadUrl }) {
   const marker = document.createElement('div');
   marker.className = 'upload-marker';
 
+  // Record mode: the recorder replaces the file picker. Location and date fill in when recording starts.
+  let mode = 'upload';
+  const recorder = recordingSupported()
+    ? createRecorder({
+        maxBytes: MAX_UPLOAD_BYTES,
+        onStart: () => {
+          const now = new Date();
+          if (!field('date').value) field('date').value = isoDate(now);
+          if (!field('title').value) field('title').value = `Recording ${now.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}`;
+          if (!field('lat').value || !field('lng').value) locate();
+        },
+      })
+    : null;
+  if (recorder) {
+    form.querySelector('[data-pane="record"]').append(recorder.element);
+    form.querySelector('.mode').hidden = false;
+  }
+  const setMode = (next) => {
+    mode = next;
+    for (const tab of form.querySelectorAll('[data-mode]')) tab.setAttribute('aria-selected', String(tab.dataset.mode === mode));
+    for (const pane of form.querySelectorAll('[data-pane]')) pane.hidden = pane.dataset.pane !== mode;
+    field('file').required = mode === 'upload';
+    status.textContent = '';
+  };
+  for (const tab of form.querySelectorAll('[data-mode]')) tab.addEventListener('click', () => setMode(tab.dataset.mode));
+
   try {
     field('passcode').value = localStorage.getItem(PASSCODE_KEY) ?? '';
     field('author').value = localStorage.getItem(AUTHOR_KEY) ?? '';
@@ -52,6 +88,7 @@ export function setupUploads({ globe, uploadUrl }) {
     button.classList.add('hidden');
   };
   const close = () => {
+    recorder?.stop(); // keeps what was recorded so far, ready to submit next time the form opens
     form.classList.add('hidden');
     button.classList.remove('hidden');
     globe.htmlElementsData([]);
@@ -76,7 +113,7 @@ export function setupUploads({ globe, uploadUrl }) {
   button.addEventListener('click', open);
   form.querySelector('[data-action="cancel"]').addEventListener('click', close);
 
-  form.querySelector('[data-action="locate"]').addEventListener('click', () => {
+  const locate = () => {
     status.textContent = 'Finding your location…';
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -86,7 +123,8 @@ export function setupUploads({ globe, uploadUrl }) {
       },
       (err) => (status.textContent = `Couldn't get your location: ${err.message}`),
     );
-  });
+  };
+  form.querySelector('[data-action="locate"]').addEventListener('click', locate);
 
   // Google Maps copies coordinates as "51.4769, -0.0005"; accept that pasted into either box.
   for (const name of ['lat', 'lng']) {
@@ -105,15 +143,14 @@ export function setupUploads({ globe, uploadUrl }) {
     if (!file) return;
     status.textContent = file.size > MAX_UPLOAD_BYTES ? tooBig(file) : '';
     if (!field('title').value) field('title').value = file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
-    if (!field('date').value) {
-      const d = new Date(file.lastModified);
-      field('date').value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
+    if (!field('date').value) field('date').value = isoDate(new Date(file.lastModified));
   });
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const file = field('file').files[0];
+    if (mode === 'record' && recorder.isRecording()) return (status.textContent = 'Stop the recording first.');
+    const file = mode === 'record' ? recorder.getFile() : field('file').files[0];
+    if (!file) return (status.textContent = 'Record something first.');
     if (file.size > MAX_UPLOAD_BYTES) return (status.textContent = tooBig(file));
     const passcode = field('passcode').value;
     const details = { filename: file.name };
@@ -152,6 +189,7 @@ export function setupUploads({ globe, uploadUrl }) {
       await sendJson('uploads/complete', { ...details, key, uploadId, parts });
 
       form.reset();
+      recorder?.reset();
       field('passcode').value = passcode;
       field('author').value = details.author;
       globe.htmlElementsData([]);
@@ -167,4 +205,8 @@ export function setupUploads({ globe, uploadUrl }) {
 function tooBig(file) {
   const mb = (bytes) => (bytes / 1024 / 1024).toFixed(1).replace(/\.0$/, '');
   return `That file is ${mb(file.size)} MB; the limit is ${mb(MAX_UPLOAD_BYTES)} MB. Try exporting it as MP3 or M4A.`;
+}
+
+function isoDate(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
