@@ -170,5 +170,15 @@
     "file": "audio/st-james-s-church.mp3",
     "notes": "sarah",
     "master": "masters/20261028T232618-st-james-s-church.m4a"
+  },
+  {
+    "id": "strand-whistles",
+    "title": "Strand whistles",
+    "author": "Alex",
+    "lat": 51.512033,
+    "lng": -0.116644,
+    "date": "2026-10-29",
+    "file": "audio/strand-whistles.mp3",
+    "master": "masters/20261029T150233-strand-whistles.webm"
   }
 ]
