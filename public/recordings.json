@@ -200,5 +200,26 @@
     "file": "audio/fish-game.mp3",
     "notes": "Rowan’s weird fish game",
     "master": "masters/20261029T191157-fish-game.webm"
+  },
+  {
+    "id": "luma",
+    "title": "Luma",
+    "author": "rowan",
+    "lat": 43.674012,
+    "lng": 4.636328,
+    "date": "2026-07-17",
+    "file": "audio/luma.mp3",
+    "master": "masters/20261030T142347-luma.m4a"
+  },
+  {
+    "id": "powerful-words-from-daddy-roche",
+    "title": "Powerful Words from Daddy Roche",
+    "author": "rowan",
+    "lat": 43.673973,
+    "lng": 4.636231,
+    "date": "2026-07-15",
+    "file": "audio/powerful-words-from-daddy-roche.mp3",
+    "notes": "literally stop caring for your grandmother losers",
+    "master": "masters/20261030T143058-powerful-words-from-daddy-roche.m4a"
   }
 ]
