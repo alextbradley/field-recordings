@@ -221,5 +221,26 @@
     "file": "audio/powerful-words-from-daddy-roche.mp3",
     "notes": "literally stop caring for your grandmother losers",
     "master": "masters/20261030T143058-powerful-words-from-daddy-roche.m4a"
+  },
+  {
+    "id": "incredibly-distant-honks",
+    "title": "Incredibly Distant Honks",
+    "author": "Rowan",
+    "lat": 51.020365,
+    "lng": 0.621591,
+    "date": "2026-11-02",
+    "file": "audio/incredibly-distant-honks.mp3",
+    "notes": "Sometimes the best honks are the hardest to hear",
+    "master": "masters/20261102T170709-incredibly-distant-honks.m4a"
+  },
+  {
+    "id": "what-shall-i-sing",
+    "title": "What shall I sing",
+    "author": "Alex",
+    "lat": 51.511966,
+    "lng": -0.115362,
+    "date": "2026-11-02",
+    "file": "audio/what-shall-i-sing.mp3",
+    "master": "masters/20261102T173632-what-shall-i-sing.webm"
   }
 ]
