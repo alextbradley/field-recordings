@@ -242,5 +242,16 @@
     "date": "2026-11-02",
     "file": "audio/what-shall-i-sing.mp3",
     "master": "masters/20261102T173632-what-shall-i-sing.webm"
+  },
+  {
+    "id": "everyone-having-a-nice-time-while-row-row-does-work",
+    "title": "Everyone having a nice time while row row does work",
+    "author": "Rowan",
+    "lat": 51.020137,
+    "lng": 0.622379,
+    "date": "2026-11-04",
+    "file": "audio/everyone-having-a-nice-time-while-row-row-does-work.mp3",
+    "notes": "🎻",
+    "master": "masters/20261104T203513-everyone-having-a-nice-time-while-row-row-does-work.m4a"
   }
 ]
