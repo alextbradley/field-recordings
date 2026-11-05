@@ -253,5 +253,25 @@
     "file": "audio/everyone-having-a-nice-time-while-row-row-does-work.mp3",
     "notes": "🎻",
     "master": "masters/20261104T203513-everyone-having-a-nice-time-while-row-row-does-work.m4a"
+  },
+  {
+    "id": "bandalandango",
+    "title": "Bandalandango",
+    "author": "Rowan",
+    "lat": 51.034157,
+    "lng": 0.611515,
+    "date": "2026-11-05",
+    "file": "audio/bandalandango.mp3",
+    "master": "masters/20261105T204150-bandalandango.m4a"
+  },
+  {
+    "id": "its-just-so-good",
+    "title": "Its just so good 🥹",
+    "author": "Rowan",
+    "lat": 51.034157,
+    "lng": 0.611515,
+    "date": "2026-11-05",
+    "file": "audio/its-just-so-good.mp3",
+    "master": "masters/20261105T204654-its-just-so-good.m4a"
   }
 ]
