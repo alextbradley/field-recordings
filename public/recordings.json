@@ -273,5 +273,15 @@
     "date": "2026-11-05",
     "file": "audio/its-just-so-good.mp3",
     "master": "masters/20261105T204654-its-just-so-good.m4a"
+  },
+  {
+    "id": "epping",
+    "title": "Epping",
+    "author": "Alex",
+    "lat": 51.642338,
+    "lng": 0.028033,
+    "date": "2026-11-08",
+    "file": "audio/epping.mp3",
+    "master": "masters/20261108T143629-epping.webm"
   }
 ]
